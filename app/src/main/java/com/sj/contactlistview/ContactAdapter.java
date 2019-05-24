@@ -55,6 +55,7 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         if (holder instanceof TopViewHolder) {
             ((TopViewHolder) holder).textView.setText("新的朋友balabala");
             //处理底部分割线
+            
             if (position == topCount - 1) {
                 ((TopViewHolder) holder).bottomLine.setVisibility(View.GONE);
             } else if (((TopViewHolder) holder).bottomLine.getVisibility() != View.VISIBLE) {
