@@ -148,7 +148,7 @@ public class IndexList extends View {
                     textView.setText(words[touchIndex]);
                     textView.setVisibility(View.VISIBLE);
                 }
-                postInvalidate();
+                invalidate();
                 break;
             case MotionEvent.ACTION_UP:
                 isTouch = false;
