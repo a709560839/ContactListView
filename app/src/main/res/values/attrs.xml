@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="IndexList">
+        <!--选中时的圆形背景颜色-->
+        <attr name="words_background_color" format="color" />
+        <!--索引字母大小-->
+        <attr name="textSize" format="dimension" />
+    </declare-styleable>
+</resources>
