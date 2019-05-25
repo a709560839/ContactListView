@@ -20,7 +20,11 @@ import java.util.List;
  * @author SJ
  */
 public class MainActivity extends AppCompatActivity implements IndexView.OnWordsChangeListener, ContactAdapter.OnClickListener {
-    private List<String> stringList = new ArrayList<>();
+    /**
+     * 制造假数据
+     */
+    private List<String> nameList = new ArrayList<>();
+
     private ContactAdapter contactAdapter;
     private LinearLayoutManager layoutManager;
 
@@ -28,8 +32,8 @@ public class MainActivity extends AppCompatActivity implements IndexView.OnWords
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        stringList.add("cc");
-        stringList.add("dc");
+//        nameList.add("sda");
+//        nameList.add("asd");
 
         initView();
     }
@@ -43,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements IndexView.OnWords
         indexView.setOnWordsChangeListener(this);
 
         contactAdapter = new ContactAdapter();
+        //使用假数据contactAdapter.setData(nameList);
         contactAdapter.setData(getContactInfo());
         contactAdapter.setOnClickListener(this);
 
@@ -67,6 +72,10 @@ public class MainActivity extends AppCompatActivity implements IndexView.OnWords
     }
 
 
+    /**
+     * 偷懒，使用联系人姓名制造数据，怕不安全的可以断网运行，或者自己下载工程造假数据
+     * @return 名字列表
+     */
     public List<String> getContactInfo() {
         List<String> data = new ArrayList<>();
         // 获得联系人名字 ，URI是ContactsContract.RawContacts.CONTENT_URI
