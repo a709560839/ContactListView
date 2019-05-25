@@ -11,6 +11,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.sj.contactlistview.util.PinyinUtils;
+import com.sj.contactlistview.view.IndexView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,13 +26,30 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private static final int TYPE_ITEM = 2;
     private static final int TYPE_BOTTOM = 3;
 
+    /**
+     * 顶部“新的朋友”之类的总数
+     */
     private int topCount = 4;
+    /**
+     * 底部
+     */
     private int bottomCount = 1;
 
+    /**
+     * 数据列表，实际使用List<xxxbean>
+     */
     private List<String> dataList = new ArrayList<>();
-    private List<String> firstWordList = new ArrayList<>();
+    /**
+     * 星标朋友数据列表，实际使用List<xxxbean>
+     */
     private List<String> starList = new ArrayList<>();
-
+    /**
+     * 返回的首字母列表
+     */
+    private List<String> firstWordList = new ArrayList<>();
+    /**
+     * 点击监听
+     */
     private OnClickListener listener;
 
     @NonNull
@@ -179,11 +197,11 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
      */
     int getFirstWordListPosition(String word) {
         //索引列表划到↑
-        if (word.equals(IndexList.words[0])) {
+        if (word.equals(IndexView.words[0])) {
             return 0;
         }
         //索引列表划到☆
-        else if (word.equals(IndexList.words[1]) && starList.size() > 0) {
+        else if (word.equals(IndexView.words[1]) && starList.size() > 0) {
             return topCount;
         } else if (firstWordList.indexOf(word) >= 0) {
             return firstWordList.indexOf(word) + topCount + starList.size();
@@ -241,7 +259,6 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         /**
          * 单击监听
-         *
          * @param view     v
          * @param position position
          */
@@ -249,7 +266,6 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         /**
          * 长按监听
-         *
          * @param view     v
          * @param position position
          */

@@ -2,17 +2,16 @@ package com.sj.contactlistview;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.database.Cursor;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.util.Log;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
+
+import com.sj.contactlistview.view.DropView;
+import com.sj.contactlistview.view.IndexView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +19,7 @@ import java.util.List;
 /**
  * @author SJ
  */
-public class MainActivity extends AppCompatActivity implements IndexList.OnWordsChangeListener, ContactAdapter.OnClickListener {
+public class MainActivity extends AppCompatActivity implements IndexView.OnWordsChangeListener, ContactAdapter.OnClickListener {
     private List<String> stringList = new ArrayList<>();
     private ContactAdapter contactAdapter;
     private LinearLayoutManager layoutManager;
@@ -37,11 +36,11 @@ public class MainActivity extends AppCompatActivity implements IndexList.OnWords
 
     private void initView() {
         RecyclerView recyclerView = findViewById(R.id.contact_rv);
-        TextView textView = findViewById(R.id.tv);
-        IndexList indexList = findViewById(R.id.index_list);
+        DropView dropView = findViewById(R.id.drop_view);
+        IndexView indexView = findViewById(R.id.index_list);
 
-        indexList.setTextView(textView);
-        indexList.setOnWordsChangeListener(this);
+        indexView.setDropView(dropView);
+        indexView.setOnWordsChangeListener(this);
 
         contactAdapter = new ContactAdapter();
         contactAdapter.setData(getContactInfo());

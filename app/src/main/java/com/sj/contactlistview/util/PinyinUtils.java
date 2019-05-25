@@ -2,7 +2,7 @@ package com.sj.contactlistview.util;
 
 import androidx.collection.SimpleArrayMap;
 
-import com.sj.contactlistview.IndexList;
+import com.sj.contactlistview.view.IndexView;
 
 /**
  * <pre>
@@ -145,7 +145,7 @@ public class PinyinUtils {
             return String.valueOf(surname.charAt(0));
         }else {
             //返回#
-            return IndexList.words[IndexList.words.length-1];
+            return IndexView.words[IndexView.words.length-1];
         }
     }
 

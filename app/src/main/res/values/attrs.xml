@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="IndexList">
+
+    <declare-styleable name="IndexView">
         <!--选中时的圆形背景颜色-->
         <attr name="words_background_color" format="color" />
         <!--索引字母大小-->
-        <attr name="textSize" format="dimension" />
+        <attr name="android:textSize"/>
+    </declare-styleable>
+
+    <declare-styleable name="DropView">
+        <!--圆形背景颜色-->
+        <attr name="background_color" format="color" />
+        <!--字母大小-->
+        <attr name="android:textSize"/>
     </declare-styleable>
 </resources>

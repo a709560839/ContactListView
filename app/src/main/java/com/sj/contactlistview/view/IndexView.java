@@ -1,4 +1,4 @@
-package com.sj.contactlistview;
+package com.sj.contactlistview.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -8,16 +8,16 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
+import com.sj.contactlistview.R;
 import com.sj.contactlistview.util.DensityUtil;
 
 /**
- * @author SJ
+ * @author 该view参考自https://blog.csdn.net/a_zhon/article/details/53214849
  */
-public class IndexList extends View {
+public class IndexView extends View {
     /**
      * 绘制的列表导航字母
      */
@@ -50,36 +50,36 @@ public class IndexList extends View {
     /**
      * 手指按下时屏幕中间的提示view
      */
-    private TextView textView;
+    private DropView dropView;
     /**
      * 手指是否触摸
      */
     private boolean isTouch;
-
+    /**
+     * 触摸的字符的回调
+     */
     private OnWordsChangeListener listener;
 
-    private String oldWord;
-
-    public IndexList(Context context) {
+    public IndexView(Context context) {
         this(context, null);
     }
 
-    public IndexList(Context context, @Nullable AttributeSet attrs) {
+    public IndexView(Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public IndexList(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public IndexView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
         init(context, attrs);
     }
 
     private void init(Context context, AttributeSet attrs) {
-        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.IndexList);
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.IndexView);
         //选中时的圆形背景颜色
-        int bgColor = a.getColor(R.styleable.IndexList_words_background_color, Color.BLUE);
+        int bgColor = a.getColor(R.styleable.IndexView_words_background_color, Color.BLUE);
         //索引字母大小，推荐为dp，可不受系统字体大小更改影响
-        float textSize = a.getDimension(R.styleable.IndexList_textSize, DensityUtil.dip2px(getContext(), 10));
+        float textSize = a.getDimension(R.styleable.IndexView_android_textSize, DensityUtil.dip2px(getContext(), 10));
         a.recycle();
 
         bgPaint = new Paint();
@@ -104,24 +104,27 @@ public class IndexList extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
         for (int i = 0; i < words.length; i++) {
             //判断是不是我们按下的当前字母
             if (touchIndex == i) {
                 if (isTouch) {
                     //绘制文字圆形背景
-                    canvas.drawCircle(itemWidth / 2, itemHeight / 2 + i * itemHeight, 23, bgPaint);
+                    canvas.drawCircle(itemWidth / 2, itemHeight / 2 + i * itemHeight, -(fontMetrics.ascent + fontMetrics.descent), bgPaint);
                     wordsPaint.setColor(Color.WHITE);
+                    //设置水滴view的移动
+                    if (dropView != null) {
+                        dropView.offsetTopAndBottom((int) (itemHeight / 2 + i * itemHeight - dropView.getMeasuredHeight() / 2));
+                    }
                 }
             } else {
                 wordsPaint.setColor(Color.BLACK);
             }
             //获取文字的宽高
             float wordWidth = wordsPaint.measureText(words[i], 0, 1);
-            float wordHeight = (fontMetrics.ascent + fontMetrics.descent) / 2;
+            float wordHeight = -(fontMetrics.ascent + fontMetrics.descent);
             //绘制字母
             float wordX = itemWidth / 2 - wordWidth / 2;
-            float wordY = itemHeight / 2 - wordHeight + i * itemHeight;
+            float wordY = itemHeight / 2 + wordHeight / 2 + i * itemHeight;
             canvas.drawText(words[i], wordX, wordY, wordsPaint);
         }
     }
@@ -142,19 +145,22 @@ public class IndexList extends View {
                     touchIndex = index;
                 }
                 //防止数组越界
-                if (listener != null && textView != null && 0 <= touchIndex && touchIndex <= words.length - 1) {
-                    //回调按下的字母
-                    listener.wordsChange(words[touchIndex]);
-                    textView.setText(words[touchIndex]);
-                    textView.setVisibility(View.VISIBLE);
+                if (listener != null && 0 <= touchIndex && touchIndex <= words.length - 1) {
+                    //去重
+                        //回调按下的字母
+                        listener.wordsChange(words[touchIndex]);
+                        if (dropView != null) {
+                            dropView.setWord(words[touchIndex]);
+                        }
                 }
                 invalidate();
                 break;
             case MotionEvent.ACTION_UP:
                 isTouch = false;
-                if (textView != null) {
-                    textView.setVisibility(View.GONE);
+                if (dropView != null) {
+                    dropView.setVisibility(View.GONE);
                 }
+                invalidate();
                 performClick();
                 break;
             default:
@@ -163,8 +169,8 @@ public class IndexList extends View {
         return true;
     }
 
-    public void setTextView(TextView textView) {
-        this.textView = textView;
+    public void setDropView(DropView dropView) {
+        this.dropView = dropView;
     }
 
     /**
